@@ -9,3 +9,7 @@ const popup = document.getElementById("popup");
 const popupContent = document.getElementById("popup-content");
 
 
+// Variables part
+let characters = [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let page = 1;
