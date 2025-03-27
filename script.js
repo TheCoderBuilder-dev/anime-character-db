@@ -56,3 +56,6 @@ charCard.innerHTML = `
   characterList.appendChild(charCard);
       });
   }
+
+ //Search Function
+  searchInput.addEventListener("input", displayCharacters);
