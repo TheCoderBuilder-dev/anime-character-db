@@ -59,3 +59,7 @@ charCard.innerHTML = `
 
  //Search Function
   searchInput.addEventListener("input", displayCharacters);
+
+
+// A sorting feature
+  filterSelect.addEventListener("change", displayCharacters);
