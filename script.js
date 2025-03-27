@@ -75,3 +75,22 @@ loadMoreBtn.addEventListener("click", () => {
   page++;
   fetchCharacters();
 });
+
+
+// The Popup Comes Out
+document.addEventListener("click", (event) => {
+  if (event.target.classList.contains("more-details")) {
+      const charId = event.target.getAttribute("data-id");
+      const character = characters.find(c => c.mal_id == charId);
+
+      if (character) {
+          popupContent.innerHTML = `
+              <span id="close-popup" class="close-btn">&times;</span>
+              <h2>${character.name}</h2>
+              <img src="${character.images.jpg.image_url}" alt="${character.name}">
+              <p>${character.about || "No description available."}</p>
+          `;
+          popup.style.display = "flex";
+      }
+  }
+});
