@@ -63,3 +63,15 @@ charCard.innerHTML = `
 
 // A sorting feature
   filterSelect.addEventListener("change", displayCharacters);
+
+
+  // Dark mode
+darkModeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+});
+
+
+loadMoreBtn.addEventListener("click", () => {
+  page++;
+  fetchCharacters();
+});
