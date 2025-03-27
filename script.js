@@ -29,3 +29,9 @@ fetch(`https://api.jikan.moe/v4/characters?page=${page}`)
 // display characters Function
 function displayCharacters() {
   characterList.innerHTML = "";
+ 
+    // Filter TO PROVIDE CHARACTERS SO THAT THE USER CAN CHOOSE
+
+    let filteredCharacters = characters.filter(character =>
+      character.name.toLowerCase().includes(searchInput.value.toLowerCase())
+  );
