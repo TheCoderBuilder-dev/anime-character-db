@@ -146,3 +146,18 @@ function displayFavorites() {
       favoritesList.appendChild(favCard);
   });
 }
+
+// Remove favorite 
+document.addEventListener("click", (event) => {
+  if (event.target.classList.contains("remove-favorite")) {
+      const charId = event.target.getAttribute("data-id");
+      favorites = favorites.filter(fav => fav.mal_id != charId);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      displayFavorites();
+      displayCharacters();
+  }
+});
+
+
+fetchCharacters();
+displayFavorites();
