@@ -130,3 +130,19 @@ function toggleFavorite(charId) {
   displayCharacters();
   displayFavorites();
 }
+
+
+// Display favorites
+function displayFavorites() {
+  favoritesList.innerHTML = "<h2>Favorites</h2>";
+  favorites.forEach(character => {
+      const favCard = document.createElement("div");
+      favCard.className = "character-card";
+      favCard.innerHTML = `
+          <img src="${character.images.jpg.image_url}" alt="${character.name}">
+          <h3>${character.name}</h3>
+          <button class="remove-favorite" data-id="${character.mal_id}">❌ Remove</button>
+      `;
+      favoritesList.appendChild(favCard);
+  });
+}
