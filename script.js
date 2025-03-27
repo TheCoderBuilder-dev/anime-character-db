@@ -35,3 +35,8 @@ function displayCharacters() {
     let filteredCharacters = characters.filter(character =>
       character.name.toLowerCase().includes(searchInput.value.toLowerCase())
   );
+
+      // Sort
+      if (filterSelect.value === "popularity") {
+        filteredCharacters.sort((a, b) => b.favorites - a.favorites);
+    }
