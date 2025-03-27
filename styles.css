@@ -135,3 +135,19 @@ button:hover {
   font-size: 20px;
   cursor: pointer;
 }
+
+
+.dark-mode {
+  background-color: #222;
+  color: white;
+}
+
+.dark-mode .character-card {
+  background: #333;
+  color: white;
+}
+
+.dark-mode #popup {
+  background: #444;
+  color: white;
+}
