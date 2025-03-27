@@ -58,7 +58,6 @@ button:hover {
   padding: 20px;
 }
 
-/* Character Card */
 .character-card {
   background: white;
   padding: 15px;
@@ -76,3 +75,56 @@ button:hover {
 .character-card h3 {
   margin: 10px 0;
 }
+
+
+#popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-height: 80vh;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
+#popup img {
+  width: 100px; 
+  height: auto;
+  border-radius: 5px;
+  display: block;
+  margin: 10px auto;
+}
+
+.popup-details {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.popup-details li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+#popup p {
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: justify;
+}
+
