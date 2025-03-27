@@ -38,3 +38,13 @@ button {
   cursor: pointer;
   border-radius: 5px;
 }
+
+
+#dark-mode-toggle {
+  background-color: #444;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.8;
+}
