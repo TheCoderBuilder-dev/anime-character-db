@@ -40,3 +40,19 @@ function displayCharacters() {
       if (filterSelect.value === "popularity") {
         filteredCharacters.sort((a, b) => b.favorites - a.favorites);
     }
+
+// Add Characres to favourite and remove
+        filteredCharacters.forEach(character => {
+   const charCard = document.createElement("div");
+   charCard.className = "character-card";
+charCard.innerHTML = `
+      <img src="${character.images.jpg.image_url}" alt="${character.name}">
+  <h3>${character.name}</h3>
+<button class="more-details" data-id="${character.mal_id}">More Details</button>
+     <button class="favorite-btn" data-id="${character.mal_id}">
+          ${isFavorite(character.mal_id) ? "❌ Remove" : "❤️ Add"}
+</button>
+          `;
+  characterList.appendChild(charCard);
+      });
+  }
