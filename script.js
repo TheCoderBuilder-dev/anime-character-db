@@ -94,3 +94,18 @@ document.addEventListener("click", (event) => {
       }
   }
 });
+
+
+// Close popup and going back to the home page
+popup.addEventListener("click", (event) => {
+  if (event.target.classList.contains("close-btn") || event.target === popup) {
+      popup.style.display = "none";
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.classList.contains("favorite-btn")) {
+      const charId = event.target.getAttribute("data-id");
+      toggleFavorite(charId);
+  }
+});
