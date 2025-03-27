@@ -109,3 +109,24 @@ document.addEventListener("click", (event) => {
       toggleFavorite(charId);
   }
 });
+
+// Checking if the anime is favourited
+function isFavorite(charId) {
+  return favorites.some(fav => fav.mal_id == charId);
+}
+
+// Add or remove character
+function toggleFavorite(charId) {
+  const character = characters.find(c => c.mal_id == charId);
+  if (!character) return;
+
+  if (isFavorite(charId)) {
+      favorites = favorites.filter(fav => fav.mal_id != charId);
+  } else {
+      favorites.push(character);
+  }
+
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  displayCharacters();
+  displayFavorites();
+}
