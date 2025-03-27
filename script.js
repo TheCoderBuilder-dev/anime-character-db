@@ -1,0 +1,11 @@
+//  the get Elements part
+const characterList = document.getElementById("character-list");
+const searchInput = document.getElementById("search");
+const filterSelect = document.getElementById("filter");
+const loadMoreBtn = document.getElementById("load-more");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+const favoritesList = document.getElementById("favorites-list");
+const popup = document.getElementById("popup");
+const popupContent = document.getElementById("popup-content");
+
+
