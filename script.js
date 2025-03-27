@@ -20,8 +20,12 @@ function fetchCharacters() {
 fetch(`https://api.jikan.moe/v4/characters?page=${page}`)
       .then(response => response.json())
       .then(data => {
-   characters = [...characters, ...data.data]; // Add new characters
+   characters = [...characters, ...data.data]; // Addnew characters to the Page
    displayCharacters();
       })
 .catch(error => console.log("Error fetching characters:", error));
 }
+
+// display characters Function
+function displayCharacters() {
+  characterList.innerHTML = "";
