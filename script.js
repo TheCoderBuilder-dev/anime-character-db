@@ -13,3 +13,15 @@ const popupContent = document.getElementById("popup-content");
 let characters = [];
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let page = 1;
+
+
+// Fetch The anime characters From api
+function fetchCharacters() {
+fetch(`https://api.jikan.moe/v4/characters?page=${page}`)
+      .then(response => response.json())
+      .then(data => {
+   characters = [...characters, ...data.data]; // Add new characters
+   displayCharacters();
+      })
+.catch(error => console.log("Error fetching characters:", error));
+}
