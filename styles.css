@@ -9,8 +9,8 @@ body {
 
 
 h1 {
-  background-color: #ff4b2b;
-  color: white;
+  background-color: #ff0000;
+  color: rgb(0, 0, 0);
   padding: 15px;
   margin: 0;
 }
@@ -45,10 +45,6 @@ button {
   color: white;
 }
 
-button:hover {
-  opacity: 0.8;
-}
-
 
 #character-list {
   display: flex;
@@ -61,8 +57,6 @@ button:hover {
 .character-card {
   background: white;
   padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   text-align: center;
   width: 200px;
 }
@@ -87,7 +81,6 @@ button:hover {
   max-height: 80vh;
   background: white;
   padding: 20px;
-  border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   overflow-y: auto;

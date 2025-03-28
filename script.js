@@ -6,13 +6,67 @@ const loadMoreBtn = document.getElementById("load-more");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 const favoritesList = document.getElementById("favorites-list");
 const popup = document.getElementById("popup");
+const loginForm = document.getElementById("login-form");
+const registerForm = document.getElementById("register-form");
+const userDisplay = document.getElementById("user-display");
+const logoutBtn = document.getElementById("logout-btn");
 
-
-
-// fetch and store data
 let characterData = [];
 let favCharacters = JSON.parse(localStorage.getItem("favorites")) || [];
 let currentPage = 1;
+let currentUser = sessionStorage.getItem("currentUser") || "";
+
+
+function updateUserDisplay() {
+    if (currentUser) {
+  userDisplay.textContent = `Welcome, ${currentUser}`;
+loginForm.style.display = "none";
+  registerForm.style.display = "none";
+logoutBtn.style.display = "block";
+    } else {
+  userDisplay.textContent = "";
+  loginForm.style.display = "block";
+  registerForm.style.display = "block";
+        logoutBtn.style.display = "none";
+    }
+}
+
+// register
+registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+const username = document.getElementById("register-username").value;
+const password = document.getElementById("register-password").value;
+
+if (localStorage.getItem(username)) {
+  alert("Username already exists!");
+    } else {
+localStorage.setItem(username, password);
+        alert("Account created! Now log in.");
+    }
+});
+
+// login
+loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();const username = document.getElementById("login-username").value;
+    
+    const password = document.getElementById("login-password").value;
+if (localStorage.getItem(username) === password) {
+    currentUser = username;
+  sessionStorage.setItem("currentUser", username);
+        updateUserDisplay();
+    } else {
+        alert("Wrong username or password.");
+    }
+});
+
+// logout
+logoutBtn.addEventListener("click", () => {
+currentUser = "";
+  sessionStorage.removeItem("currentUser");
+    updateUserDisplay();
+});
+
+updateUserDisplay();
 
 
 // fetch anime characters from Jikan
@@ -22,7 +76,7 @@ function fetchCharacters() {
     fetch(`https://api.jikan.moe/v4/characters?page=${currentPage}`)
         .then(response => response.json())
       .then(data => {
-            characterData = [...characterData, ...data.data];
+     characterData = [...characterData, ...data.data];
           displayCharacters();
         })
         .catch(error => console.log("Error fetching characters:", error));
@@ -53,7 +107,7 @@ function displayCharacters() {
       <h3>${character.name}</h3>
       <button class="more-details" data-id="${character.mal_id}">More Details</button>
             <button class="favorite-btn" data-id="${character.mal_id}">
-                ${isFavorite(character.mal_id) ? "❌ Remove" : "❤️ Add"}
+  ${isFavorite(character.mal_id) ? "❌ Remove" : "❤️ Add"}
             </button>
         `;
 
@@ -66,7 +120,7 @@ function addEventListeners() {
   searchInput.addEventListener("input", displayCharacters);
     filterSelect.addEventListener("change", displayCharacters);
   darkModeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
+ document.body.classList.toggle("dark-mode");
     });
     loadMoreBtn.addEventListener("click", () => {
         currentPage++;
@@ -77,15 +131,15 @@ function addEventListeners() {
 // show popup 
 document.addEventListener("click", (event) => {
     if (event.target.classList.contains("more-details")) {
-        const charId = event.target.getAttribute("data-id");
-        const character = characterData.find(c => c.mal_id == charId);
+  const charId = event.target.getAttribute("data-id");
+     const character = characterData.find(c => c.mal_id == charId);
         
         if (character) {
             document.getElementById("popup-content").innerHTML = `
-      <span id="close-popup" class="close-btn">&times;</span>
+   <span id="close-popup" class="close-btn">&times;</span>
       <h2>${character.name}</h2>
       <img src="${character.images.jpg.image_url}" alt="${character.name}">
-                <p>${character.about || "No description available."}</p>
+  <p>${character.about || "No description available."}</p>
             `;
             popup.style.display = "flex";
         }
