@@ -1,4 +1,4 @@
-//  the get Elements part
+// get the elements from the  DOM
 const characterList = document.getElementById("character-list");
 const searchInput = document.getElementById("search");
 const filterSelect = document.getElementById("filter");
@@ -6,158 +6,155 @@ const loadMoreBtn = document.getElementById("load-more");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 const favoritesList = document.getElementById("favorites-list");
 const popup = document.getElementById("popup");
-const popupContent = document.getElementById("popup-content");
 
 
-// Variables part
-let characters = [];
-let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-let page = 1;
+
+// fetch and store data
+let characterData = [];
+let favCharacters = JSON.parse(localStorage.getItem("favorites")) || [];
+let currentPage = 1;
 
 
-// Fetch The anime characters From api
+// fetch anime characters from Jikan
 function fetchCharacters() {
-fetch(`https://api.jikan.moe/v4/characters?page=${page}`)
-      .then(response => response.json())
+    console.log(`Fetching page ${currentPage} of characters...`);
+    
+    fetch(`https://api.jikan.moe/v4/characters?page=${currentPage}`)
+        .then(response => response.json())
       .then(data => {
-   characters = [...characters, ...data.data]; // Addnew characters to the Page
-   displayCharacters();
-      })
-.catch(error => console.log("Error fetching characters:", error));
+            characterData = [...characterData, ...data.data];
+          displayCharacters();
+        })
+        .catch(error => console.log("Error fetching characters:", error));
 }
 
-// display characters Function
+
+
+
+// display the characters
 function displayCharacters() {
-  characterList.innerHTML = "";
- 
-    // Filter TO PROVIDE CHARACTERS SO THAT THE USER CAN CHOOSE
+    characterList.innerHTML = "";
+    
+    let filteredCharacters = characterData.filter(character => {
+      return character.name.toLowerCase().indexOf(searchInput.value.toLowerCase()) !== -1; // More human-like filtering
+    });
 
-    let filteredCharacters = characters.filter(character =>
-      character.name.toLowerCase().includes(searchInput.value.toLowerCase())
-  );
-
-      // Sort
-      if (filterSelect.value === "popularity") {
-        filteredCharacters.sort((a, b) => b.favorites - a.favorites);
+    // sort by popularity
+    if (filterSelect.value === "popularity") {
+  filteredCharacters.sort((a, b) => b.favorites - a.favorites);
     }
 
-// Add Characres to favourite and remove
-        filteredCharacters.forEach(character => {
-   const charCard = document.createElement("div");
-   charCard.className = "character-card";
-charCard.innerHTML = `
-      <img src="${character.images.jpg.image_url}" alt="${character.name}">
-  <h3>${character.name}</h3>
-<button class="more-details" data-id="${character.mal_id}">More Details</button>
-     <button class="favorite-btn" data-id="${character.mal_id}">
-          ${isFavorite(character.mal_id) ? "❌ Remove" : "❤️ Add"}
-</button>
-          `;
-  characterList.appendChild(charCard);
-      });
-  }
+    filteredCharacters.forEach(character => {
+  const charCard = document.createElement("div");
+        charCard.className = "character-card";
 
- //Search Function
+        charCard.innerHTML = `
+            <img src="${character.images.jpg.image_url}" alt="${character.name}">
+      <h3>${character.name}</h3>
+      <button class="more-details" data-id="${character.mal_id}">More Details</button>
+            <button class="favorite-btn" data-id="${character.mal_id}">
+                ${isFavorite(character.mal_id) ? "❌ Remove" : "❤️ Add"}
+            </button>
+        `;
+
+        characterList.appendChild(charCard);
+    });
+}
+
+// add event listeners
+function addEventListeners() {
   searchInput.addEventListener("input", displayCharacters);
+    filterSelect.addEventListener("change", displayCharacters);
+  darkModeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+    });
+    loadMoreBtn.addEventListener("click", () => {
+        currentPage++;
+        fetchCharacters();
+    });
+}
 
-
-// A sorting feature
-  filterSelect.addEventListener("change", displayCharacters);
-
-
-  // Dark mode
-darkModeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-});
-
-
-loadMoreBtn.addEventListener("click", () => {
-  page++;
-  fetchCharacters();
-});
-
-
-// The Popup Comes Out
+// show popup 
 document.addEventListener("click", (event) => {
-  if (event.target.classList.contains("more-details")) {
-      const charId = event.target.getAttribute("data-id");
-      const character = characters.find(c => c.mal_id == charId);
-
-      if (character) {
-          popupContent.innerHTML = `
-              <span id="close-popup" class="close-btn">&times;</span>
-              <h2>${character.name}</h2>
-              <img src="${character.images.jpg.image_url}" alt="${character.name}">
-              <p>${character.about || "No description available."}</p>
-          `;
-          popup.style.display = "flex";
-      }
-  }
+    if (event.target.classList.contains("more-details")) {
+        const charId = event.target.getAttribute("data-id");
+        const character = characterData.find(c => c.mal_id == charId);
+        
+        if (character) {
+            document.getElementById("popup-content").innerHTML = `
+      <span id="close-popup" class="close-btn">&times;</span>
+      <h2>${character.name}</h2>
+      <img src="${character.images.jpg.image_url}" alt="${character.name}">
+                <p>${character.about || "No description available."}</p>
+            `;
+            popup.style.display = "flex";
+        }
+    }
 });
 
-
-// Close popup and going back to the home page
+// close popup
 popup.addEventListener("click", (event) => {
-  if (event.target.classList.contains("close-btn") || event.target === popup) {
-      popup.style.display = "none";
-  }
+    if (event.target.classList.contains("close-btn") || event.target === popup) {
+  popup.style.display = "none";
+    }
 });
 
+// adding and removing favorites
 document.addEventListener("click", (event) => {
-  if (event.target.classList.contains("favorite-btn")) {
-      const charId = event.target.getAttribute("data-id");
-      toggleFavorite(charId);
-  }
+    if (event.target.classList.contains("favorite-btn")) {
+  const charId = event.target.getAttribute("data-id");
+        toggleFavorite(charId);
+    }
 });
 
-// Checking if the anime is favourited
 function isFavorite(charId) {
-  return favorites.some(fav => fav.mal_id == charId);
+    return favCharacters.some(fav => fav.mal_id == charId);
 }
 
-// Add or remove character
 function toggleFavorite(charId) {
-  const character = characters.find(c => c.mal_id == charId);
-  if (!character) return;
+    const character = characterData.find(c => c.mal_id == charId);
+if (!character) return;
 
-  if (isFavorite(charId)) {
-      favorites = favorites.filter(fav => fav.mal_id != charId);
-  } else {
-      favorites.push(character);
-  }
+    if (isFavorite(charId)) {
+  favCharacters = favCharacters.filter(fav => fav.mal_id != charId);
+    } else {
+        favCharacters.push(character);
+    }
 
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  displayCharacters();
-  displayFavorites();
+localStorage.setItem("favorites", JSON.stringify(favCharacters));
+    displayCharacters();
+    displayFavorites();
 }
 
-
-// Display favorites
+// show favorites list
 function displayFavorites() {
-  favoritesList.innerHTML = "<h2>Favorites</h2>";
-  favorites.forEach(character => {
-      const favCard = document.createElement("div");
-      favCard.className = "character-card";
-      favCard.innerHTML = `
-          <img src="${character.images.jpg.image_url}" alt="${character.name}">
-          <h3>${character.name}</h3>
-          <button class="remove-favorite" data-id="${character.mal_id}">❌ Remove</button>
-      `;
-      favoritesList.appendChild(favCard);
-  });
+    favoritesList.innerHTML = "<h2>Favorites</h2>";
+    
+    favCharacters.forEach(character => {
+        const favCard = document.createElement("div");
+        favCard.className = "character-card";
+
+        favCard.innerHTML = `
+    <img src="${character.images.jpg.image_url}" alt="${character.name}">
+    <h3>${character.name}</h3>
+    <button class="remove-favorite" data-id="${character.mal_id}">❌ Remove</button>
+        `;
+
+        favoritesList.appendChild(favCard);
+    });
 }
 
-// Remove favorite 
+// remove favorite
 document.addEventListener("click", (event) => {
-  if (event.target.classList.contains("remove-favorite")) {
-      const charId = event.target.getAttribute("data-id");
-      favorites = favorites.filter(fav => fav.mal_id != charId);
-      localStorage.setItem("favorites", JSON.stringify(favorites));
-      displayFavorites();
-      displayCharacters();
-  }
+    if (event.target.classList.contains("remove-favorite")) {
+  const charId = event.target.getAttribute("data-id");
+  favCharacters = favCharacters.filter(fav => fav.mal_id != charId);
+  localStorage.setItem("favorites", JSON.stringify(favCharacters));
+  displayFavorites();
+  displayCharacters();
+    }
 });
-
 
 fetchCharacters();
 displayFavorites();
+addEventListeners();
